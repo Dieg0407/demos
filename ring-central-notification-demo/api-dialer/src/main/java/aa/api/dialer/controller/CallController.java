@@ -1,5 +1,7 @@
 package aa.api.dialer.controller;
 
+import aa.api.dialer.service.hook.TelephonyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/call")
+@RequiredArgsConstructor
 public class CallController {
+  final TelephonyService telephonyService;
 
   @PostMapping(path = "/hook/{extensionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> hookPerExtension(
@@ -24,6 +28,7 @@ public class CallController {
           .header("Validation-Token", validation)
           .build();
     }
+    telephonyService.handleIncomingEvent(payload, extensionId);
     return ResponseEntity.ok().build();
   }
 

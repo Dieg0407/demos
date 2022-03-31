@@ -4,4 +4,6 @@ import com.ringcentral.RestClient;
 
 public interface RestClientFactory {
   RestClient createClient(String authenticationToken);
+
+  RestClient createMainClient();
 }

@@ -2,9 +2,13 @@ package aa.api.dialer.service.factory;
 
 import aa.api.dialer.conf.properties.AppProps;
 import com.ringcentral.RestClient;
+import com.ringcentral.RestException;
 import com.ringcentral.definitions.TokenInfo;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,5 +21,28 @@ public class RestClientFactoryImpl implements RestClientFactory {
     client.token = new TokenInfo().access_token(authenticationToken);
 
     return client;
+  }
+
+  @Override
+  public RestClient createMainClient() {
+    final var rc = properties.getRingCentral();
+    final var client = new RestClient(
+        rc.getMainAccount().getClientId(),
+        rc.getMainAccount().getClientSecret(),
+        rc.getUrl()
+    );
+
+    try {
+      client.authorize(rc.getMainAccount().getJwt());
+
+      return client;
+    } catch (IOException | RestException e) {
+      final var message = "Login failed to RingCentral with stored credentials for tha main account";
+      throw new ResponseStatusException(
+          HttpStatus.UNAUTHORIZED,
+          message,
+          e
+      );
+    }
   }
 }

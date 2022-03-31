@@ -10,12 +10,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ExtensionServiceImpl implements ExtensionService {
-
   @Override
-  public GetExtensionInfoResponse findLoggedInUserExtension(RestClient authenticatedClient) {
+  public GetExtensionInfoResponse findExtensionInfo(RestClient authenticatedClient,
+      String extensionId) {
     try {
       return authenticatedClient.restapi().account()
-          .extension("~")
+          .extension(extensionId)
           .get();
     } catch (RestException | IOException e) {
       throw new ResponseStatusException(
@@ -24,5 +24,10 @@ public class ExtensionServiceImpl implements ExtensionService {
           e
       );
     }
+  }
+
+  @Override
+  public GetExtensionInfoResponse findLoggedInUserExtension(RestClient authenticatedClient) {
+    return findExtensionInfo(authenticatedClient, "~");
   }
 }

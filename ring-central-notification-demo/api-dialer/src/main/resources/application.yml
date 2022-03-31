@@ -4,7 +4,11 @@ server:
     context-path: /api
 
 app:
-  hook-url: ${NGROK_DOMAIN}/api/v1/call/hook
+  hook-url: ${NGROK_DOMAIN}/dialer/api/v1/call/hook
   ring-central:
     subscription-ttl: 86400
     url: https://platform.devtest.ringcentral.com
+    main-account:
+      client-id: ~
+      client-secret: ~
+      jwt: ~

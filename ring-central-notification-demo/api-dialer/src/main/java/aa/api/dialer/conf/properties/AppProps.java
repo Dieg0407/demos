@@ -15,5 +15,13 @@ public class AppProps {
   public static class RingCentralProps {
     private String url;
     private long subscriptionTtl;
+    private RingCentralMainAccount mainAccount;
+  }
+
+  @Data
+  public static class RingCentralMainAccount {
+    String clientId;
+    String clientSecret;
+    String jwt;
   }
 }
