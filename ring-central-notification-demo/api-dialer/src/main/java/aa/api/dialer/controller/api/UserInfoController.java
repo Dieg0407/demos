@@ -3,6 +3,7 @@ package aa.api.dialer.controller.api;
 import aa.api.dialer.model.UserInfo;
 import aa.api.dialer.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ public class UserInfoController {
   private final UserService service;
 
   @GetMapping(path = "")
+  @CrossOrigin("${NGROK_DOMAIN}")
   public UserInfo whoAmI(@RequestHeader("x-rc-auth-token") String authToken) {
     return service.whoAmI(authToken);
   }
