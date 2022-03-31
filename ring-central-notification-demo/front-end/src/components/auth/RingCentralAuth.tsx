@@ -13,11 +13,18 @@ const genRandom64 = () => {
   	.replace(/=/g, "");
 }
 const codeVerifier = genRandom64(); 
-const codeChallenge = CryptoES.SHA256(codeVerifier);
+const codeChallenge = CryptoES.SHA256(codeVerifier).toString(CryptoES.enc.Base64)
+	.replace(/\+/g, '-')
+	.replace(/\//g, '_')
+	.replace(/=/g, '');
+
 const clientId = "HY6uDzgiTwe-Omm4uzUs3g";
-const callbackUrl = "https://f46a-38-25-17-223.ngrok.io/callback";
+const parsed = new URL(window.location.href);
+const callbackUrl = `${parsed.protocol}//${parsed.hostname}/callback`;
 const url = `https://platform.devtest.ringcentral.com/restapi/oauth/authorize?response_type=code&redirect_uri=${callbackUrl}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=${"S256"}`;
 const authUrl = "https://platform.devtest.ringcentral.com/restapi/oauth/token";
+
+console.table([['Verifier', codeVerifier], ["Challenge", codeChallenge]]);
 
 const RingCentralAuth: React.FC<any> = () => {
 	const [authCode, setAuthCode] = React.useState<string>("");
