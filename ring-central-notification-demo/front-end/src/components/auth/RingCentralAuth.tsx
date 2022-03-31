@@ -1,7 +1,7 @@
 import React from "react";
 import AuthPopup from "../util/AuthPopup";
 import CryptoES from "crypto-es";
-import { createSubscription, UserInfo, whoAmICall } from "../../service/dialer-service";
+import { UserInfo, whoAmICall, connectToWebHook, InboundCallNotification } from "../../service/dialer-service";
 
 const genRandom64 = () => {
 	const bytes: number[] = [];
@@ -39,18 +39,11 @@ const RingCentralAuth: React.FC<any> = () => {
 	const [credentials, setCredentials] = React.useState<null | any>(null);
 	const [userInfo, setUserInfo] = React.useState<null | UserInfo>(null);
 
-	const onCode = React.useCallback(
-		(callbackCode: string) => setAuthCode(callbackCode),
-		[setAuthCode]
-	);
-	const onClose = React.useCallback(
-		() => setTogglePopup(false),
-		[setTogglePopup]
-	);
+	const onCode = React.useCallback((callbackCode: string) => setAuthCode(callbackCode), [setAuthCode]);
+	const onClose = React.useCallback(() => setTogglePopup(false), [setTogglePopup]);
+	const onIncommingCall = React.useCallback((event: InboundCallNotification) => console.log(event), []);
 
-	const toggleButton = (
-		<button onClick={() => setTogglePopup(true)}>Authorize</button>
-	);
+	const toggleButton = (<button onClick={() => setTogglePopup(true)}>Authorize</button>);
 
 	const showUserInfo = (
 		<div>
@@ -72,8 +65,13 @@ const RingCentralAuth: React.FC<any> = () => {
 	);
 
 	React.useEffect(() => {
+		if (userInfo != null) {
+			connectToWebHook(userInfo.email, onIncommingCall);
+		}
+	}, [userInfo])
+
+	React.useEffect(() => {
 		const callWhoAmI = async() => {
-			//await createSubscription(credentials?.access_token);
 			const user = await whoAmICall(credentials?.access_token);
 			setUserInfo(user);
 		}

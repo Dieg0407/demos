@@ -1,5 +1,6 @@
 package aa.api.dialer.conf;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -9,10 +10,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+  @Value("${NGROK_DOMAIN}")
+  String ngrokDomain;
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/incoming-calls");
+    registry.addEndpoint("/incoming-calls").setAllowedOrigins(ngrokDomain);
     registry.addEndpoint("/incoming-calls").withSockJS();
   }
 
