@@ -1,8 +1,19 @@
 import React from "react";
 import AuthPopup from "../util/AuthPopup";
+import CryptoES from 'crypto-es';
 
-const codeVerifier = "EmVNUsZ6SF3YFrf0c7J3mPZE9ENtZbMwPMGZl7NZ2iM";
-const codeChallenge = "VNbCb0eR3ODPx1H16iSTwI3NdY8rzcVgVGeO7JZ1F1Y";
+const genRandom64 = () => {
+	const bytes: number[] = [];
+	for(let i = 0; i < 32; i = i + 1) {
+	bytes.push(Math.floor(Math. random() * 256));
+}
+	return window.btoa(String.fromCharCode.apply(null, bytes))
+	.replace(/\+/g, "-")
+  	.replace(/\//g, "_")
+  	.replace(/=/g, "");
+}
+const codeVerifier = genRandom64(); 
+const codeChallenge = CryptoES.SHA256(codeVerifier);
 const clientId = "HY6uDzgiTwe-Omm4uzUs3g";
 const callbackUrl = "https://f46a-38-25-17-223.ngrok.io/callback";
 const url = `https://platform.devtest.ringcentral.com/restapi/oauth/authorize?response_type=code&redirect_uri=${callbackUrl}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=${"S256"}`;
