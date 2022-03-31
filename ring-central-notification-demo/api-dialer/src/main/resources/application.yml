@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+app:
+  hook-url: ${NGROK_DOMAIN}/api/v1/call/hook
+  ring-central:
+    subscription-ttl: 86400
+    url: https://platform.devtest.ringcentral.com
