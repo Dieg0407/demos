@@ -16,7 +16,6 @@ import lombok.extern.jackson.Jacksonized;
 @Builder(toBuilder = true)
 @Jacksonized
 @EqualsAndHashCode
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CallEvent {
   private UUID id;
 
