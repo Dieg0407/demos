@@ -9,6 +9,6 @@ app:
     subscription-ttl: 86400
     url: https://platform.devtest.ringcentral.com
     main-account:
-      client-id: ~
-      client-secret: ~
-      jwt: ~
+      client-id: f7R1hd8dSY2RHQfsYTXYzw
+      client-secret: T82ihYdXSA6u9wHe6lDrBgYKaqLPVfR_qxN8qg3VwQvA
+      jwt: 'eyJraWQiOiI4NzYyZjU5OGQwNTk0NGRiODZiZjVjYTk3ODA0NzYwOCIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJhdWQiOiJodHRwczpcL1wvcGxhdGZvcm0uZGV2dGVzdC5yaW5nY2VudHJhbC5jb21cL3Jlc3RhcGlcL29hdXRoXC90b2tlbiIsInN1YiI6IjMwOTMwNTAwNCIsImlzcyI6Imh0dHBzOlwvXC9wbGF0Zm9ybS5kZXZ0ZXN0LnJpbmdjZW50cmFsLmNvbSIsImV4cCI6Mzc5NjIyMTg4NywiaWF0IjoxNjQ2NDIyMzY5LCJqdGkiOiJjSFdzSUFFOFNCeS1yTUJONzNlbS1BIn0.Qi4amcBgpHcks-DSBMOpmAwZWc70eOQdAS8gJ2K0WdHLYpLgG5LHIZ0aO4rshCIigFG03c2BtYch6KUNqq6t1a6gnoEv1ba_eWhME0BTlM0H4dL8bMggG8FRLNi8GfrPyKuUEk8xC4mc4rn1gCcWZthrXs3A3UuYXOPpfBpG6sl4Bs2hW1jBIL5VvaJYKU8s3px4qd-yxOI1FxV4aGZ09nxJdiHnoj1PdHRqQ3YdxRtgRI8haZoLKlkLsqx36IeC7VFbK9FeXTEZmbrbe3V2cAm_SGoEyqMpFCyZEM5slkCsNJHYQfm8OXF79q6RPkYRYgut4gVu95_G-wG5JECqYQ'

@@ -1,4 +1,4 @@
-package aa.api.dialer.controller;
+package aa.api.dialer.controller.api;
 
 import aa.api.dialer.service.hook.TelephonyService;
 import lombok.RequiredArgsConstructor;

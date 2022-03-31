@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 	implementation 'com.ringcentral:ringcentral:2.8.4'
 	compileOnly 'org.projectlombok:lombok'

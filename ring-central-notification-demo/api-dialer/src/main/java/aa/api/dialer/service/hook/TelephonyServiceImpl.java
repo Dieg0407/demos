@@ -1,5 +1,6 @@
 package aa.api.dialer.service.hook;
 
+import aa.api.dialer.model.AnsweredCallEvent;
 import aa.api.dialer.model.CallEvent;
 import aa.api.dialer.model.event.Telephony;
 import aa.api.dialer.model.event.Telephony.Direction;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ringcentral.RestClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +24,7 @@ public class TelephonyServiceImpl implements TelephonyService {
   private final ObjectMapper mapper;
   private final RestClient mainAccountClient;
   private final ExtensionService extensionService;
+  private final ApplicationEventPublisher publisher;
 
   @Override
   public void handleIncomingEvent(String payload, String hookExtensionId) {
@@ -53,6 +56,12 @@ public class TelephonyServiceImpl implements TelephonyService {
             "The user with mail {} answered a call from {}",
             extensionInfo.contact.email,
             callEvent.getFrom().getPhoneNumber()
+        );
+
+        publisher.publishEvent(new AnsweredCallEvent(
+            this,
+            extensionInfo.contact.email,
+            callEvent.getFrom().getPhoneNumber())
         );
       }
 
