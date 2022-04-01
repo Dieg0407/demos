@@ -2,7 +2,7 @@ import { Client } from "@stomp/stompjs";
 
 const parsed = new URL(window.location.href);
 export const dialerServiceBaseUrl = `${parsed.protocol}//${parsed.hostname}/dialer/api`;
-export const dialerIncomingCallWS = `ws://${parsed.hostname}/incoming-calls`;
+export const dialerIncomingCallWS = `wss://${parsed.hostname}/incoming-calls`;
 
 export interface UserInfo {
 	name: string;
@@ -51,15 +51,18 @@ export const connectToWebHook = (
 	email: string,
 	onMessageArrived: (event: InboundCallNotification) => void
 ) => {
+	
 	const base64data = window.btoa(email);
 	const client = new Client({
-		brokerURL: "ws://bca0-38-25-17-223.ngrok.io/incoming-calls",
+		brokerURL: dialerIncomingCallWS,
+		//webSocketFactory: () => new SockJS.default("http://localhost:8081/api/incoming-calls", {}),
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
 		heartbeatOutgoing: 4000,
 		logRawCommunication: true,
 		connectHeaders: {
-			
+			login: '',
+			passcode: ''
 		},
 		debug: (x) => console.log(x),
 	});

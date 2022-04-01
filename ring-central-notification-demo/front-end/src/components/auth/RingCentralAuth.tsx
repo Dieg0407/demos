@@ -1,7 +1,6 @@
 import React from "react";
 import AuthPopup from "../util/AuthPopup";
 import CryptoES from "crypto-es";
-import { Client } from "@stomp/stompjs";
 
 import {
 	UserInfo,
@@ -77,30 +76,6 @@ const RingCentralAuth: React.FC<any> = () => {
 			{userInfo == null && <h2>User not logged in</h2>}
 		</div>
 	);
-	React.useEffect(() => {
-		const base64data = window.btoa("dieg0407@hotmail.com");
-		const client = new Client({
-			brokerURL: "ws://bca0-38-25-17-223.ngrok.io/incoming-calls",
-			reconnectDelay: 5000,
-			heartbeatIncoming: 4000,
-			heartbeatOutgoing: 4000,
-			logRawCommunication: true,
-			connectHeaders: {},
-			debug: (x) => console.log(x),
-		});
-
-		client.onConnect = (frame) => {
-			console.log("client connected");
-			client.subscribe("/topic/answered-calls/" + base64data, (message) => {
-				const notification: InboundCallNotification = JSON.parse(message.body);
-				console.log(notification);
-
-				message.ack();
-			});
-		};
-
-		client.activate();
-	}, []);
 
 	React.useEffect(() => {
 		if (userInfo != null) {
