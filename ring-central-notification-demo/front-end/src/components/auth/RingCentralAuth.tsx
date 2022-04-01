@@ -10,6 +10,8 @@ import {
 	createSubscription,
 } from "../../service/dialer-service";
 
+import NotificationPopup, { NotificationProps } from "./NotificationPopup";
+
 const genRandom64 = () => {
 	const bytes: number[] = [];
 	for (let i = 0; i < 32; i = i + 1) {
@@ -40,6 +42,7 @@ const RingCentralAuth: React.FC<any> = () => {
 	const [togglePopup, setTogglePopup] = React.useState<boolean>(false);
 	const [credentials, setCredentials] = React.useState<null | any>(null);
 	const [userInfo, setUserInfo] = React.useState<null | UserInfo>(null);
+	const [notification, setNotification] = React.useState<null | NotificationProps>(null);
 
 	const onCode = React.useCallback(
 		(callbackCode: string) => setAuthCode(callbackCode),
@@ -50,9 +53,9 @@ const RingCentralAuth: React.FC<any> = () => {
 		[setTogglePopup]
 	);
 	const onIncommingCall = React.useCallback(
-		(event: InboundCallNotification) => console.log(event),
-		[]
-	);
+		(event: InboundCallNotification) => {
+			setNotification({ leadNumber: event.leadPhoneNumber, leadName: event.lead ? `${event.lead.name} ${event.lead.lastName}` : undefined });
+		},[]);
 
 	const toggleButton = (
 		<button onClick={() => setTogglePopup(true)}>Authorize</button>
@@ -126,6 +129,7 @@ const RingCentralAuth: React.FC<any> = () => {
 
 	return (
 		<>
+			{notification != null && <NotificationPopup {...notification}/>}
 			{!isAuthorized && !togglePopup && toggleButton}
 			{!isAuthorized && togglePopup && (
 				<AuthPopup onClose={onClose} onCode={onCode} url={url} />
