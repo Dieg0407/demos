@@ -27,6 +27,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     );
 
 
-    eventSubscriptionService.create(authenticatedClient, events, userExtension.id);
+    eventSubscriptionService.create(events, userExtension.id);
   }
 }

@@ -26,9 +26,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class EventSubscriptionServiceImpl implements EventSubscriptionService {
   private final AppProps properties;
+  private final RestClient authenticatedClient;
 
   @Override
-  public void create(final RestClient authenticatedClient, final List<String> events, final long userExtensionId) {
+  public void create(final List<String> events, final long userExtensionId) {
     final var hookEndpoint = format("%s/%d", properties.getHookUrl(), userExtensionId);
     try {
       final var subscriptions = authenticatedClient.restapi()

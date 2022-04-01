@@ -1,7 +1,15 @@
 import React from "react";
 import AuthPopup from "../util/AuthPopup";
 import CryptoES from "crypto-es";
-import { UserInfo, whoAmICall, connectToWebHook, InboundCallNotification } from "../../service/dialer-service";
+import { Client } from "@stomp/stompjs";
+
+import {
+	UserInfo,
+	whoAmICall,
+	connectToWebHook,
+	InboundCallNotification,
+	createSubscription,
+} from "../../service/dialer-service";
 
 const genRandom64 = () => {
 	const bytes: number[] = [];
@@ -27,11 +35,6 @@ const callbackUrl = `${parsed.protocol}//${parsed.hostname}/callback`;
 const url = `https://platform.devtest.ringcentral.com/restapi/oauth/authorize?response_type=code&redirect_uri=${callbackUrl}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=${"S256"}`;
 const authUrl = "https://platform.devtest.ringcentral.com/restapi/oauth/token";
 
-console.table([
-	["Verifier", codeVerifier],
-	["Challenge", codeChallenge],
-]);
-
 const RingCentralAuth: React.FC<any> = () => {
 	const [authCode, setAuthCode] = React.useState<string>("");
 	const [isAuthorized, setIsAuthorized] = React.useState<boolean>(false);
@@ -39,11 +42,22 @@ const RingCentralAuth: React.FC<any> = () => {
 	const [credentials, setCredentials] = React.useState<null | any>(null);
 	const [userInfo, setUserInfo] = React.useState<null | UserInfo>(null);
 
-	const onCode = React.useCallback((callbackCode: string) => setAuthCode(callbackCode), [setAuthCode]);
-	const onClose = React.useCallback(() => setTogglePopup(false), [setTogglePopup]);
-	const onIncommingCall = React.useCallback((event: InboundCallNotification) => console.log(event), []);
+	const onCode = React.useCallback(
+		(callbackCode: string) => setAuthCode(callbackCode),
+		[setAuthCode]
+	);
+	const onClose = React.useCallback(
+		() => setTogglePopup(false),
+		[setTogglePopup]
+	);
+	const onIncommingCall = React.useCallback(
+		(event: InboundCallNotification) => console.log(event),
+		[]
+	);
 
-	const toggleButton = (<button onClick={() => setTogglePopup(true)}>Authorize</button>);
+	const toggleButton = (
+		<button onClick={() => setTogglePopup(true)}>Authorize</button>
+	);
 
 	const showUserInfo = (
 		<div>
@@ -60,23 +74,47 @@ const RingCentralAuth: React.FC<any> = () => {
 					</div>
 				</>
 			)}
-			{userInfo == null && (<h2>User not logged in</h2>)}
+			{userInfo == null && <h2>User not logged in</h2>}
 		</div>
 	);
+	React.useEffect(() => {
+		const base64data = window.btoa("dieg0407@hotmail.com");
+		const client = new Client({
+			brokerURL: "ws://bca0-38-25-17-223.ngrok.io/incoming-calls",
+			reconnectDelay: 5000,
+			heartbeatIncoming: 4000,
+			heartbeatOutgoing: 4000,
+			logRawCommunication: true,
+			connectHeaders: {},
+			debug: (x) => console.log(x),
+		});
+
+		client.onConnect = (frame) => {
+			console.log("client connected");
+			client.subscribe("/topic/answered-calls/" + base64data, (message) => {
+				const notification: InboundCallNotification = JSON.parse(message.body);
+				console.log(notification);
+
+				message.ack();
+			});
+		};
+
+		client.activate();
+	}, []);
 
 	React.useEffect(() => {
 		if (userInfo != null) {
 			connectToWebHook(userInfo.email, onIncommingCall);
 		}
-	}, [userInfo])
+	}, [userInfo]);
 
 	React.useEffect(() => {
-		const callWhoAmI = async() => {
+		const callWhoAmI = async () => {
+			await createSubscription(credentials?.access_token);
 			const user = await whoAmICall(credentials?.access_token);
 			setUserInfo(user);
-		}
-		if (credentials != null)
-			callWhoAmI();
+		};
+		if (credentials != null) callWhoAmI();
 	}, [credentials]);
 
 	React.useEffect(() => {

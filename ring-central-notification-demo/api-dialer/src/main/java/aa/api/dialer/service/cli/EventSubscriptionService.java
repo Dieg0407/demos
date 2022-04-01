@@ -5,7 +5,6 @@ import java.util.List;
 
 public interface EventSubscriptionService {
   void create(
-      final RestClient authenticatedClient,
       final List<String> events,
       final long userExtensionId
   );

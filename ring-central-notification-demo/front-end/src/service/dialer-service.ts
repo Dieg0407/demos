@@ -1,11 +1,12 @@
-import * as StompJs from '@stomp/stompjs';
+import { Client } from "@stomp/stompjs";
 
-export const dialerServiceBaseUrl = 'http://localhost:8081/api';
-export const dialerIncomingCallWS = 'ws://localhost:8081/api/incoming-calls';
+const parsed = new URL(window.location.href);
+export const dialerServiceBaseUrl = `${parsed.protocol}//${parsed.hostname}/dialer/api`;
+export const dialerIncomingCallWS = `ws://${parsed.hostname}/incoming-calls`;
 
 export interface UserInfo {
-  name: string;
-  email: string;
+	name: string;
+	email: string;
 }
 
 export interface Lead {
@@ -21,43 +22,50 @@ export interface InboundCallNotification {
 }
 
 export const whoAmICall = async (authToken: string): Promise<UserInfo> => {
-  const myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("x-rc-auth-token", authToken);
+	const myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("x-rc-auth-token", authToken);
 
-		const response = await fetch(`${dialerServiceBaseUrl}/v1/user-info`, {
-			method: 'get',
-			headers: myHeaders,
-		});
+	const response = await fetch(`${dialerServiceBaseUrl}/v1/user-info`, {
+		method: "get",
+		headers: myHeaders,
+	});
 
-    return response.json();
-}
+	return response.json();
+};
 
 export const createSubscription = async (authToken: string) => {
-  const myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-		myHeaders.append("x-rc-auth-token", authToken);
+	const myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("x-rc-auth-token", authToken);
 
-		const response = await fetch(`${dialerServiceBaseUrl}/v1/subscription`, {
-			method: 'post',
-			headers: myHeaders,
-		});
+	const response = await fetch(`${dialerServiceBaseUrl}/v1/subscription`, {
+		method: "post",
+		headers: myHeaders,
+	});
 
-    return response.json();
-} 
+	return response.status;
+};
 
-export const connectToWebHook = (email: string, onMessageArrived: (event: InboundCallNotification) => void ) => {
+export const connectToWebHook = (
+	email: string,
+	onMessageArrived: (event: InboundCallNotification) => void
+) => {
 	const base64data = window.btoa(email);
-	const client = new StompJs.Client({
-		brokerURL: dialerIncomingCallWS,
+	const client = new Client({
+		brokerURL: "ws://bca0-38-25-17-223.ngrok.io/incoming-calls",
 		reconnectDelay: 5000,
 		heartbeatIncoming: 4000,
 		heartbeatOutgoing: 4000,
 		logRawCommunication: true,
+		connectHeaders: {
+			
+		},
 		debug: (x) => console.log(x),
 	});
 
-	client.onConnect = function (frame) {
+	client.onConnect = (frame) => {
+		console.log("client connected");
 		client.subscribe("/topic/answered-calls/" + base64data, (message) => {
 			const notification: InboundCallNotification = JSON.parse(message.body);
 			onMessageArrived(notification);
@@ -65,6 +73,7 @@ export const connectToWebHook = (email: string, onMessageArrived: (event: Inboun
 			message.ack();
 		});
 	};
-	
+
 	client.activate();
-}
+	return client;
+};
