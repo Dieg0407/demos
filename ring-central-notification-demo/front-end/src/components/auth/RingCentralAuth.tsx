@@ -52,7 +52,7 @@ const RingCentralAuth: React.FC<any> = () => {
 		() => setTogglePopup(false),
 		[setTogglePopup]
 	);
-	const onIncommingCall = React.useCallback(
+	const onIncomingCall = React.useCallback(
 		(event: InboundCallNotification) => {
 			setNotification({ leadNumber: event.leadPhoneNumber, leadName: event.lead ? `${event.lead.name} ${event.lead.lastName}` : undefined });
 		},[]);
@@ -65,7 +65,7 @@ const RingCentralAuth: React.FC<any> = () => {
 		<div>
 			{userInfo != null && (
 				<>
-					<h2>This are the credentials</h2>
+					<h2>These are the credentials</h2>
 					<div>
 						<label>Name: </label>
 						<p>{userInfo?.name}</p>
@@ -82,7 +82,7 @@ const RingCentralAuth: React.FC<any> = () => {
 
 	React.useEffect(() => {
 		if (userInfo != null) {
-			connectToWebHook(userInfo.email, onIncommingCall);
+			connectToWebHook(userInfo.email, onIncomingCall);
 		}
 	}, [userInfo]);
 
