@@ -15,8 +15,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/incoming-calls").setAllowedOrigins(ngrokDomain, "http://localhost:3000", "http://localhost:8080");
-    registry.addEndpoint("/incoming-calls").setAllowedOrigins(ngrokDomain, "http://localhost:3000", "http://localhost:8080").withSockJS();
+    registry.addEndpoint("/incoming-calls").setAllowedOrigins(
+        ngrokDomain,
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "http://app:3000",
+        "http://app:8080"
+    );
+    registry.addEndpoint("/incoming-calls").setAllowedOrigins(
+        ngrokDomain,
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "http://app:3000",
+        "http://app:8080"
+    ).withSockJS();
   }
 
   @Override

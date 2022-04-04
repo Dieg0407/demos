@@ -23,5 +23,8 @@ public class AppProps {
     String clientId;
     String clientSecret;
     String jwt;
+    String username;
+    String password;
+    String extension;
   }
 }

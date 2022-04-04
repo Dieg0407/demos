@@ -33,7 +33,10 @@ public class RestClientFactoryImpl implements RestClientFactory {
     );
 
     try {
-      client.authorize(rc.getMainAccount().getJwt());
+      if (rc.getMainAccount().getJwt() != null)
+        client.authorize(rc.getMainAccount().getJwt());
+      else
+        client.authorize(rc.getMainAccount().getUsername(), rc.getMainAccount().getExtension(), rc.getMainAccount().getPassword());
 
       return client;
     } catch (IOException | RestException e) {
