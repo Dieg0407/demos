@@ -48,10 +48,12 @@ public class RingCentralConfig {
 
     @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.MINUTES)
     public void authenticate() {
+      final var rc = props.getRingCentral();
       try {
-        client.authorize(
-            props.getRingCentral().getMainAccount().getJwt()
-        );
+        if (rc.getMainAccount().getJwt() != null)
+          client.authorize(rc.getMainAccount().getJwt());
+        else
+          client.authorize(rc.getMainAccount().getUsername(), rc.getMainAccount().getExtension(), rc.getMainAccount().getPassword());
       }
       catch (RestException | IOException e) {
         log.error("Failed to re authenticate", e);
