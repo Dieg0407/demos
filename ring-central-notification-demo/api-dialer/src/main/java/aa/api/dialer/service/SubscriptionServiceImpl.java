@@ -26,7 +26,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         format("/restapi/v1.0/account/%s/extension/%s/telephony/sessions?direction=Inbound", userExtension.account.id, userExtension.id)
     );
 
-
-    eventSubscriptionService.create(events, userExtension.id);
+    eventSubscriptionService.create(authenticatedClient, events, userExtension.id);
   }
 }

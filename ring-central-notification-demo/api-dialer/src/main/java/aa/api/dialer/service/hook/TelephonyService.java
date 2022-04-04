@@ -2,5 +2,5 @@ package aa.api.dialer.service.hook;
 
 public interface TelephonyService {
 
-  void handleIncomingEvent(String payload, String hookExtensionId);
+  void handleIncomingCallEvent(String payload, String hookExtensionId);
 }

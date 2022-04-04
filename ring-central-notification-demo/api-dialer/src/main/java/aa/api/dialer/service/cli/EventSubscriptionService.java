@@ -8,4 +8,9 @@ public interface EventSubscriptionService {
       final List<String> events,
       final long userExtensionId
   );
+  void create(
+      final RestClient userClient,
+      final List<String> events,
+      final long userExtensionId
+  );
 }

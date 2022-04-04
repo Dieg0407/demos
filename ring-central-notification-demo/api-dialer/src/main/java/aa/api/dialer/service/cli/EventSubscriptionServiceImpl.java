@@ -26,13 +26,14 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class EventSubscriptionServiceImpl implements EventSubscriptionService {
   private final AppProps properties;
-  private final RestClient authenticatedClient;
+  private final RestClient mainAccountClient;
 
   @Override
-  public void create(final List<String> events, final long userExtensionId) {
+  public void create(RestClient userClient, List<String> events,
+      long userExtensionId) {
     final var hookEndpoint = format("%s/%d", properties.getHookUrl(), userExtensionId);
     try {
-      final var subscriptions = authenticatedClient.restapi()
+      final var subscriptions = userClient.restapi()
           .subscription()
           .list()
           .records;
@@ -42,9 +43,9 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
           .collect(Collectors.toList());
 
       if (affectedSubscriptions.isEmpty())
-        createNewSub(authenticatedClient, events, hookEndpoint);
+        createNewSub(userClient, events, hookEndpoint);
       else
-        refreshAffectedSubscriptions(authenticatedClient, events, affectedSubscriptions, hookEndpoint);
+        refreshAffectedSubscriptions(userClient, events, affectedSubscriptions, hookEndpoint);
 
     } catch (RestException | IOException e) {
       throw new ResponseStatusException(
@@ -53,6 +54,11 @@ public class EventSubscriptionServiceImpl implements EventSubscriptionService {
           e
       );
     }
+  }
+
+  @Override
+  public void create(final List<String> events, final long userExtensionId) {
+    create(mainAccountClient, events, userExtensionId);
   }
 
   private void refreshAffectedSubscriptions(

@@ -27,7 +27,7 @@ public class TelephonyServiceImpl implements TelephonyService {
   private final ApplicationEventPublisher publisher;
 
   @Override
-  public void handleIncomingEvent(String payload, String hookExtensionId) {
+  public void handleIncomingCallEvent(String payload, String hookExtensionId) {
     try {
       final var telephonyEvent = mapper.readValue(payload, Telephony.class);
       final var body = telephonyEvent.getBody();

@@ -28,7 +28,7 @@ public class CallController {
           .header("Validation-Token", validation)
           .build();
     }
-    telephonyService.handleIncomingEvent(payload, extensionId);
+    telephonyService.handleIncomingCallEvent(payload, extensionId);
     return ResponseEntity.ok().build();
   }
 
