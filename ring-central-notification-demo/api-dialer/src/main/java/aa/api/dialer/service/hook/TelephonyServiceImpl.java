@@ -1,6 +1,6 @@
 package aa.api.dialer.service.hook;
 
-import aa.api.dialer.model.AnsweredCallEvent;
+import aa.api.dialer.model.event.AnsweredCallEvent;
 import aa.api.dialer.model.CallEvent;
 import aa.api.dialer.model.event.Telephony;
 import aa.api.dialer.model.event.Telephony.Direction;

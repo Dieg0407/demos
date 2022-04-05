@@ -1,5 +1,16 @@
 version: "3.3"
 services:
+  postgres:
+    image: "postgres:14.2"
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres 
+      POSTGRES_DB: postgres
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   dialer:
     build: api-dialer/
     image: api-dialer:1.1
@@ -8,15 +19,23 @@ services:
     environment:
       - SERVER_PORT=8081
       - SERVER_SERVLET_CONTEXT_PATH=/api
-      - NGROK_DOMAIN=https://26e2-38-25-17-223.ngrok.io
-      - APP_HOOK_URL=https://26e2-38-25-17-223.ngrok.io/dialer/api/v1/call/hook
-      - RING_CENTRAL_SUBSCRIPTION_TTL=86400
-      - RING_CENTRAL_URL=https://platform.devtest.ringcentral.com
-      - RING_CENTRAL_MAIN_ACCOUNT_CLIENT_ID=d6MzVZUCTOiFnWBXn1C00w
-      - RING_CENTRAL_MAIN_ACCOUNT_CLIENT_SECRET=<>
-      - RING_CENTRAL_MAIN_ACCOUNT_USERNAME=+12054849099
-      - RING_CENTRAL_MAIN_ACCOUNT_PASSWORD=<>
-      - RING_CENTRAL_MAIN_ACCOUNT_EXTENSION=101
+      - NGROK_DOMAIN=https://2bb3-38-25-17-223.ngrok.io
+      - APP_HOOK_URL=https://2bb3-38-25-17-223.ngrok.io/dialer/api/v1/call/hook
+      - APP_RINGCENTRAL_SUBSCRIPTIONTTL=86400
+      - APP_RINGCENTRAL_URL=https://platform.devtest.ringcentral.com
+      - APP_RINGCENTRAL_MAINACCOUNT_CLIENTID=<>
+      - APP_RINGCENTRAL_MAINACCOUNT_CLIENTSECRET=<>
+      - APP_RINGCENTRAL_MAINACCOUNT_USERNAME=<>
+      - APP_RINGCENTRAL_MAINACCOUNT_PASSWORD=<>
+      - APP_RINGCENTRAL_MAINACCOUNT_EXTENSION=<>
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?stringtype=unspecified
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_PROPERTIES_HIBERNATE_SHOWSQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMATSQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULTSCHEMA=dialer
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+
   app:
     build: front-end/
     image: app:1.1

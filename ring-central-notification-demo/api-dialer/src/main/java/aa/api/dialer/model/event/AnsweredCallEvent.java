@@ -1,4 +1,4 @@
-package aa.api.dialer.model;
+package aa.api.dialer.model.event;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
