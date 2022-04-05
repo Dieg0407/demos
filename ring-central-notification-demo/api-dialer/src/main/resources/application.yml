@@ -12,7 +12,7 @@ spring:
         default_schema: dialer
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgresql://localhost:5432/db?stringtype=unspecified
+    url: jdbc:postgresql://localhost:5433/postgres?stringtype=unspecified
     username: postgres
     password: postgres
     
@@ -23,7 +23,7 @@ app:
     url: https://platform.devtest.ringcentral.com
     main-account:
       client-id: d6MzVZUCTOiFnWBXn1C00w
-      client-secret: ~
-      username: '+12054849099'
-      password: ~
-      extension: '101'
+      client-secret: aeMt49DdQ221Kh3dRYyHpwZ4R-EGJOSWKIESAcStujNg
+      username: ~
+      password: china@123
+      extension: ~

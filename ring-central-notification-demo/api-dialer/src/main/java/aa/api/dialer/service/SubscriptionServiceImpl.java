@@ -2,8 +2,8 @@ package aa.api.dialer.service;
 
 import static java.lang.String.format;
 
-import aa.api.dialer.service.cli.EventSubscriptionService;
-import aa.api.dialer.service.cli.ExtensionService;
+import aa.api.dialer.service.cli.rc.EventSubscriptionService;
+import aa.api.dialer.service.cli.rc.ExtensionService;
 import aa.api.dialer.service.factory.RestClientFactory;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;

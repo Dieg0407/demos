@@ -17,7 +17,7 @@ public class UserInfoController {
 
   @GetMapping(path = "")
   @CrossOrigin("${NGROK_DOMAIN}")
-  public UserInfo whoAmI(@RequestHeader("x-rc-auth-token") String authToken) {
+  public UserInfo whoAmI(@RequestHeader(Headers.RC_AUTH_HEADER) String authToken) {
     return service.whoAmI(authToken);
   }
 }

@@ -4,6 +4,7 @@ import aa.api.dialer.conf.properties.AppProps;
 import aa.api.dialer.service.factory.RestClientFactory;
 import com.ringcentral.RestClient;
 import com.ringcentral.RestException;
+import com.ringcentral.definitions.GetTokenRequest;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,6 @@ public class RingCentralConfig {
     return factory.createMainClient();
   }
 
-
   @Slf4j
   @Component
   public static class Timer {
@@ -36,24 +36,24 @@ public class RingCentralConfig {
     @Autowired
     private AppProps props;
 
-    @Scheduled(fixedDelay = 190, timeUnit = TimeUnit.SECONDS)
-    public void refreshToken() {
-      try {
-        client.refresh();
-      }
-      catch (RestException | IOException e) {
-        log.error("Failed to refresh", e);
-      }
-    }
-
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedDelay = 50, timeUnit = TimeUnit.MINUTES)
     public void authenticate() {
       final var rc = props.getRingCentral();
       try {
+        final var auth = new GetTokenRequest();
+
         if (rc.getMainAccount().getJwt() != null)
-          client.authorize(rc.getMainAccount().getJwt());
+          auth.grant_type("urn:ietf:params:oauth:grant-type:jwt-bearer")
+              .assertion(rc.getMainAccount().getJwt());
         else
-          client.authorize(rc.getMainAccount().getUsername(), rc.getMainAccount().getExtension(), rc.getMainAccount().getPassword());
+          auth.grant_type("password")
+              .username(rc.getMainAccount().getUsername())
+              .password(rc.getMainAccount().getPassword())
+              .extension(rc.getMainAccount().getExtension());
+
+        rc.setSubscriptionTtl(3600L);
+
+        client.authorize(auth);
       }
       catch (RestException | IOException e) {
         log.error("Failed to re authenticate", e);

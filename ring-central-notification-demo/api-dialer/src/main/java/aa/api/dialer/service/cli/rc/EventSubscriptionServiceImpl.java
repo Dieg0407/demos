@@ -1,4 +1,4 @@
-package aa.api.dialer.service.cli;
+package aa.api.dialer.service.cli.rc;
 
 import static java.lang.String.format;
 

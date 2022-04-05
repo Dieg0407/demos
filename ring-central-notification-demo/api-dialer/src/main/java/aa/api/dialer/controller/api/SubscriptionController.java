@@ -17,13 +17,13 @@ public class SubscriptionController {
 
   @PostMapping("")
   @CrossOrigin("${NGROK_DOMAIN}")
-  public void createSubscription(@RequestHeader("x-rc-auth-token") String authToken) {
+  public void createSubscription(@RequestHeader(Headers.RC_AUTH_HEADER) String authToken) {
     service.create(authToken);
   }
 
   @DeleteMapping("")
   @CrossOrigin("${NGROK_DOMAIN}")
-  public void deleteSubscription(@RequestHeader("x-rc-auth-token") String authToken) {
+  public void deleteSubscription(@RequestHeader(Headers.RC_AUTH_HEADER) String authToken) {
 
   }
 }

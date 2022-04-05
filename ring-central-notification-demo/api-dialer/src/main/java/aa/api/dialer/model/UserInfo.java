@@ -16,8 +16,8 @@ public class UserInfo {
   private String name;
   private String email;
 
-  private Device devices;
-  private PhoneNumber numbers;
+  private List<Device> devices;
+  private List<PhoneNumber> numbers;
 
   @Getter
   @ToString
@@ -25,8 +25,9 @@ public class UserInfo {
   @Jacksonized
   @EqualsAndHashCode
   public static class Device {
-    private long id;
+    private String id;
     private String description;
+    private Boolean isOnline;
   }
 
   @Getter
@@ -37,6 +38,7 @@ public class UserInfo {
   public static class PhoneNumber {
     private long id;
     private String phoneNumber;
+    private String type;
     private List<String> features;
   }
 }

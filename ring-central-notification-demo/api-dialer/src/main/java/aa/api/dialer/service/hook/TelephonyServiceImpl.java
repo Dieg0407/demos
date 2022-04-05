@@ -6,7 +6,7 @@ import aa.api.dialer.model.event.Telephony;
 import aa.api.dialer.model.event.Telephony.Direction;
 import aa.api.dialer.model.event.Telephony.Origin;
 import aa.api.dialer.model.event.Telephony.Status;
-import aa.api.dialer.service.cli.ExtensionService;
+import aa.api.dialer.service.cli.rc.ExtensionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ringcentral.RestClient;
