@@ -1,6 +1,7 @@
 package aa.api.dialer.controller.api;
 
-import aa.api.dialer.service.hook.TelephonyService;
+import aa.api.dialer.service.hook.IncomingCallHookService;
+import aa.api.dialer.service.hook.TrackingCallHookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/call")
 @RequiredArgsConstructor
 public class CallController {
-  final TelephonyService telephonyService;
+  final IncomingCallHookService incomingCallHookService;
+  final TrackingCallHookService trackingCallHookService;
 
-  @PostMapping(path = "/hook/{extensionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Void> hookPerExtension(
+  @PostMapping(path = "/tracking-event", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> trackingCallHook(
+      @RequestHeader(name = "Validation-Token", required = false) String validation,
+      @RequestBody(required = false) String payload
+  ) {
+    if (payload == null) {
+      return ResponseEntity.ok()
+          .header("Validation-Token", validation)
+          .build();
+    }
+    trackingCallHookService.handle(payload);
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping(path = "/incoming-event/{extensionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> incomingCallHook(
       @RequestHeader(name = "Validation-Token", required = false) String validation,
       @RequestBody(required = false) String payload,
       @PathVariable("extensionId") String extensionId
@@ -28,7 +44,7 @@ public class CallController {
           .header("Validation-Token", validation)
           .build();
     }
-    telephonyService.handleIncomingCallEvent(payload, extensionId);
+    incomingCallHookService.handle(payload, extensionId);
     return ResponseEntity.ok().build();
   }
 }

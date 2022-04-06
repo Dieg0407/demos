@@ -1,6 +1,6 @@
 package aa.api.dialer.model;
 
-import aa.api.dialer.model.event.Telephony;
+import aa.api.dialer.model.event.RcTelephonyEvent;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.OffsetDateTime;
@@ -27,15 +27,15 @@ public class CallEvent {
 
   private short sequence;
 
-  private Telephony.Status status;
+  private RcTelephonyEvent.Status status;
 
   private String reason;
 
-  private Telephony.Direction direction;
+  private RcTelephonyEvent.Direction direction;
 
   private String partyId;
 
-  private String extensionId;
+  private String partyExtensionId;
 
   private CallParty from;
 
@@ -64,7 +64,15 @@ public class CallEvent {
     String deviceId;
   }
 
-  public static CallEvent fromTelephony(Telephony event, String payload, String hookExtensionId) {
+  public static CallEvent fromTelephony(RcTelephonyEvent event, String payload, String hookExtensionId) {
+    if (event.getBody() == null) {
+      return CallEvent.builder()
+          .externalEventId(event.getUuid())
+          .hookExtensionId(hookExtensionId)
+          .event(payload)
+          .build();
+    }
+
     final var body = event.getBody();
     final var callBuilder = CallEvent.builder();
     body.getParties()
@@ -76,7 +84,7 @@ public class CallEvent {
           callBuilder.reason(party.getStatus() == null ? null : party.getStatus().getReason());
           callBuilder.missedCall(party.isMissedCall());
           callBuilder.partyId(party.getId());
-          callBuilder.extensionId(party.getExtensionId());
+          callBuilder.partyExtensionId(party.getExtensionId());
 
           if (party.getTo() != null) {
             final var partyInfo = party.getTo();

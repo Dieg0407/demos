@@ -10,7 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-public class Telephony {
+public class RcTelephonyEvent {
   // the event doesn't have the uuid format, but it's called uuid nonetheless
   String uuid;
   String event;
