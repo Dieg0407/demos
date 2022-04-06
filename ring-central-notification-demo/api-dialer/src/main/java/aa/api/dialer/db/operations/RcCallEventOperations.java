@@ -1,4 +1,4 @@
-package aa.api.dialer.db.oprations;
+package aa.api.dialer.db.operations;
 
 import aa.api.dialer.model.CallEvent;
 import java.util.UUID;

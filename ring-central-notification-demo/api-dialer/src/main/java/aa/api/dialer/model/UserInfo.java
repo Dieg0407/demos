@@ -16,6 +16,7 @@ public class UserInfo {
   private String name;
   private String email;
 
+  private UserPresence presence;
   private List<Device> devices;
   private List<PhoneNumber> numbers;
 
@@ -40,5 +41,14 @@ public class UserInfo {
     private String phoneNumber;
     private String type;
     private List<String> features;
+  }
+
+  @Getter
+  @ToString
+  @Builder(toBuilder = true)
+  @Jacksonized
+  @EqualsAndHashCode
+  public static class UserPresence {
+    private Boolean allowQueueCalls;
   }
 }

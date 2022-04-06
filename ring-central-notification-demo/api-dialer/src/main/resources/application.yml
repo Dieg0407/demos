@@ -22,8 +22,8 @@ app:
     subscription-ttl: 86400
     url: https://platform.devtest.ringcentral.com
     main-account:
-      client-id: d6MzVZUCTOiFnWBXn1C00w
-      client-secret: aeMt49DdQ221Kh3dRYyHpwZ4R-EGJOSWKIESAcStujNg
+      client-id: ~
+      client-secret: ~
       username: ~
-      password: china@123
+      password: ~
       extension: ~

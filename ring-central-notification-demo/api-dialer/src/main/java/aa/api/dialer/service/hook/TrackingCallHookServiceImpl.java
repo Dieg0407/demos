@@ -1,6 +1,6 @@
 package aa.api.dialer.service.hook;
 
-import aa.api.dialer.db.oprations.RcCallEventOperations;
+import aa.api.dialer.db.operations.RcCallEventOperations;
 import aa.api.dialer.model.CallEvent;
 import aa.api.dialer.model.event.RcTelephonyEvent;
 import aa.api.dialer.service.validator.TelephonyValidator;
