@@ -7,10 +7,10 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class AnsweredCallEvent extends ApplicationEvent  {
+public class CompletedTransferEvent extends ApplicationEvent {
   private final CallEvent event;
 
-  public AnsweredCallEvent(Object source, CallEvent event) {
+  public CompletedTransferEvent(Object source, CallEvent event) {
     super(source);
     this.event = event;
   }

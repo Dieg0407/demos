@@ -36,22 +36,14 @@ public class RingCentralConfig {
     @Autowired
     private AppProps props;
 
-    @Scheduled(fixedDelay = 50, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
     public void authenticate() {
       final var rc = props.getRingCentral();
       try {
         final var auth = new GetTokenRequest();
-
-        if (rc.getMainAccount().getJwt() != null)
-          auth.grant_type("urn:ietf:params:oauth:grant-type:jwt-bearer")
-              .assertion(rc.getMainAccount().getJwt());
-        else
-          auth.grant_type("password")
-              .username(rc.getMainAccount().getUsername())
-              .password(rc.getMainAccount().getPassword())
-              .extension(rc.getMainAccount().getExtension());
-
-        rc.setSubscriptionTtl(3600L);
+        auth.grant_type("refresh_token")
+            .endpoint_id(client.token.endpoint_id)
+            .refresh_token(client.token.refresh_token);
 
         client.authorize(auth);
       }

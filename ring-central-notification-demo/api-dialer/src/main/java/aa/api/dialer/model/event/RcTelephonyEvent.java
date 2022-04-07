@@ -66,6 +66,15 @@ public class RcTelephonyEvent {
     Status code;
     boolean rcc;
     String reason;
+    Peer peerId;
+  }
+  @Value
+  @Builder
+  @Jacksonized
+  public static class Peer {
+    String partyId;
+    String sessionId;
+    String telephonySessionId;
   }
 
   @Value
