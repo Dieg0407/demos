@@ -14,13 +14,14 @@ public class TelephonyValidator {
         body.getOrigin() == null ||
         body.getParties() == null) {
       log.warn("Payload was not valid {}", payload);
-      return false;
+      return true;
     }
 
     if (body.getOrigin().getType() != Origin.Call && body.getOrigin().getType() != Origin.CallOut) {
       log.warn("Payload was not valid {}", payload);
-      return false;
+      return true;
     }
-    return true;
+
+    return false;
   }
 }

@@ -22,10 +22,10 @@ public class TrackingCallHookServiceImpl implements TrackingCallHookService {
   public void handle(String payload) {
     try {
       final var telephonyEvent = mapper.readValue(payload, RcTelephonyEvent.class);
-      if (!validator.isNotValid(telephonyEvent, payload))
+      if (validator.isNotValid(telephonyEvent, payload))
         return;
-      final var callEvent = CallEvent.fromTelephony(telephonyEvent, payload, null);
 
+      final var callEvent = CallEvent.fromTelephony(telephonyEvent, payload, null);
       operations.create(callEvent);
     }
     catch (JsonProcessingException e) {

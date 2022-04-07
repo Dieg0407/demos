@@ -46,6 +46,7 @@ public class RcTelephonyEvent {
     PartyNumber from;
     PartyNumber to;
     CallStatus status;
+    List<Recording> recordings;
   }
 
   @Value
@@ -72,6 +73,13 @@ public class RcTelephonyEvent {
   @Jacksonized
   public static class CallOrigin {
     Origin type;
+  }
+
+  @Value
+  @Builder
+  @Jacksonized
+  public static class Recording {
+    String id;
   }
 
   public enum Origin {

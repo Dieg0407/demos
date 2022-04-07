@@ -1,10 +1,15 @@
 package aa.api.dialer.model;
 
 import aa.api.dialer.model.event.RcTelephonyEvent;
+import aa.api.dialer.model.event.RcTelephonyEvent.Recording;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,6 +56,9 @@ public class CallEvent {
 
   private String hookExtensionId;
 
+  @JsonIgnore
+  private List<String> recordingIds;
+
   @Getter
   @ToString
   @Builder(toBuilder = true)
@@ -85,6 +93,10 @@ public class CallEvent {
           callBuilder.missedCall(party.isMissedCall());
           callBuilder.partyId(party.getId());
           callBuilder.partyExtensionId(party.getExtensionId());
+          callBuilder.recordingIds(party.getRecordings() != null ?
+              party.getRecordings().stream().map(Recording::getId).collect(Collectors.toList()) :
+              new ArrayList<>()
+          );
 
           if (party.getTo() != null) {
             final var partyInfo = party.getTo();

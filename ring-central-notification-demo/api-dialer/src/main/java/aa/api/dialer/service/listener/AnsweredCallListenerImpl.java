@@ -10,7 +10,6 @@ import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +20,6 @@ public class AnsweredCallListenerImpl implements AnsweredCallListener {
   private final LeadService leadService;
 
   @Override
-  @Async
   @EventListener
   public void enrichCallerData(AnsweredCallEvent answeredCallEvent) {
     final var lead = leadService.findLeadByPhoneNumber(answeredCallEvent.getCallerPhoneNumber());

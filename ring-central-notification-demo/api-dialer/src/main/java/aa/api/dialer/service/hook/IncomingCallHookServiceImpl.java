@@ -1,5 +1,6 @@
 package aa.api.dialer.service.hook;
 
+import aa.api.dialer.db.operations.RcCallEventOperations;
 import aa.api.dialer.model.event.AnsweredCallEvent;
 import aa.api.dialer.model.CallEvent;
 import aa.api.dialer.model.event.RcTelephonyEvent;
@@ -29,18 +30,28 @@ public class IncomingCallHookServiceImpl implements IncomingCallHookService {
 
   @Override
   public void handle(String payload, String hookExtensionId) {
+    if (hookExtensionId == null)
+      return;
+
     try {
       final var telephonyEvent = mapper.readValue(payload, RcTelephonyEvent.class);
-      if (!validator.isNotValid(telephonyEvent, payload))
+      if (validator.isNotValid(telephonyEvent, payload))
         return;
 
       final var callEvent = CallEvent.fromTelephony(telephonyEvent, payload, hookExtensionId);
-      // we only care for answered event
-      if (callEvent.getDirection() != Direction.Inbound || callEvent.getStatus() != Status.Answered) {
-        return;
-      }
+      /*
+      if (callEvent.getStatus() == Status.Proceeding &&  hookExtensionId.equals(callEvent.getPartyExtensionId())) {
+        log.info(String.format("{{url}}/restapi/v1.0/account/~/telephony/sessions/%s/parties/%s/answer", callEvent.getTelephonyId(), callEvent.getPartyId()));
+      }*/
 
+      // we only care for answered event
+      if (callEvent.getDirection() != Direction.Inbound || callEvent.getStatus() != Status.Answered)
+        return;
       if (!hookExtensionId.equals(callEvent.getPartyExtensionId()))
+        return;
+
+      // when recording is enabled then we have two answered events
+      if (!callEvent.getRecordingIds().isEmpty())
         return;
 
       final var extensionInfo = extensionService.findExtensionInfo(mainAccountClient, callEvent.getPartyExtensionId());
