@@ -14,11 +14,13 @@ services:
   dialer:
     build: api-dialer/
     image: api-dialer:1.1
+    ports:
+      - 8081:8081
     environment:
       - SERVER_PORT=8081
       - SERVER_SERVLET_CONTEXT_PATH=/api
       - NGROK_DOMAIN=https://2bb3-38-25-17-223.ngrok.io
-      - APP_HOOK_URL=https://2bb3-38-25-17-223.ngrok.io/dialer/api/v1/call/hook
+      - APP_HOOK_URL=https://2bb3-38-25-17-223.ngrok.io/dialer/api/v1/call/incoming-event
       - APP_RINGCENTRAL_SUBSCRIPTIONTTL=86400
       - APP_RINGCENTRAL_URL=https://platform.devtest.ringcentral.com
       - APP_RINGCENTRAL_MAINACCOUNT_CLIENTID=<>
