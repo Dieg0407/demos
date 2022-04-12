@@ -27,7 +27,7 @@ import org.hibernate.annotations.TypeDefs;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rc_call_event")
+@Table(name = "rc_call_event", schema = "dialer")
 @TypeDefs({
     @TypeDef(name = "json", typeClass = JsonType.class),
     @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
